@@ -9,11 +9,10 @@ Eliminar producto
 Salir
 """
 opcion=0
-nombreProductos=[]
-precioProductos=[]
-stockProductos=[]
 
-def agregarProducto():
+listaProductos=[]
+#producto={"nombre": nombre, "cantidad":stock,"precio":precio}
+def solicitarProducto():
     nombreProd= input("Ingrese el nombre del nuevo producto: ")
     try:
         precioProd= int(input("Ingrese el precio del nuevo producto: "))
@@ -21,25 +20,60 @@ def agregarProducto():
         if precioProd<0 or stockProd<0:
             raise ValueError
         else:
-            nombreProductos.append(nombreProd)
-            precioProductos.append(precioProd)
-            stockProductos.append(stockProd)
+          return[nombreProd,precioProd,stockProd]
     except ValueError:
         print("Debe ingresar valores númericos positivos")
 
 def buscarProducto(nombre):
-    try:
-        indice=nombreProductos.index(nombre)
-        nombreProd=nombreProductos[indice]
-        precioProd=precioProductos[indice]
-        stockProd=stockProductos[indice]
+
+    for producto in listaProductos:
+        if producto["nombre"]==nombre:
+            return producto
         
-        producto=[nombreProd,precioProd,stockProd]
-        return producto
+    return None
 
-    except ValueError:
-        print("No se encontró el producto")
+def guardarProducto(nombre,precio,stock)
+    
+    if buscarProducto(nombre)==None:
+        producto={
+            "nombre": nombre,
+            "cantidad":stock,
+            "precio":precio
+            }
+        listaProductos.append(producto)
+        print("producto guardado de forma exitosa")
+    else:
+        print("ya existe un producto con ese nombre")
 
+def actualizarProducto(nombre,nuevoStock,nuevoPrecio):
+    productoBuscado=buscarProducto(nombre)
+    if productoBuscado !=None:
+        indice= listaProductos.index(productoBuscado)
+        productoBuscado["cantidad"]=nuevoStock
+        productoBuscado["precio"]=nuevoPrecio
+        #actualizar el producto en la lista de prouctos
+        listaProductos[indice]=productoBuscado
+        print(f"el producto {nombre} fue actualizado correctamente")
+    else:
+        print("el producto que intenta actualizar no existe")
+
+def mostrarInventarioCompleto():
+    if len(listaProductos)==0:
+        print("no hay productos en la lista")
+    else:
+        for producto in listaProductos:
+            print(f"nombre : {producto["nombre"]} \t\t precio: ${producto["precio"]} \t\t stock: {producto["cantidad"]}")
+
+def eliminarProducto(nombre):
+    productoBuscado=buscarProducto(nombre)
+    if productoBuscado !=None:
+        listaProductos.remove(productoBuscado)
+        print("el producto fue eliminado exitosamente")
+    else:
+        print("el producto no existe")
+
+
+ 
 
 
 while opcion!="6":
@@ -55,10 +89,35 @@ while opcion!="6":
 
     match opcion:
         case "1":
-            agregarProducto()
+            infoProducto=solicitarProducto()
+            #[nombreProd,precioProd,stockProd]
+            if infoProducto!=None:
+                guardarProducto(infoProducto[0],
+                                infoProducto[1],
+                                infoProducto[2])
         case "2":
             nombre=input("Ingrese el nombre del producto a buscar: ")
             productoEncontrado=buscarProducto(nombre)
             if productoEncontrado!=None:
-                print(f"Nombre: {productoEncontrado[0]} \t\t Precio: ${productoEncontrado[1]} \t\t Stock: {productoEncontrado[2]}")
-            
+                print("-"*66)
+                print(f"nombre : {productoEncontrado{"nombre"}} \t\t precio: ${productoEncontrado{"precio"}} \t\t stock: {productoEncontrado{"cantidad"}}")
+                print("-"*60)    
+
+        case "3":
+            infoProducto=solicitarProducto()
+            #nombreProd,precioProd,stockProd
+            if infoProducto !=None:
+                actualizarProducto(nombre=infoProducto[0], nuevoStock=infoProducto[1],nuevoPrecio=infoProducto{2} )
+
+        case "4":
+            mostrarInventarioCompleto()
+
+        case "5":
+             nombre=input("Ingrese el nombre del producto a eliminar: ")
+             eliminarProducto(nombre)
+
+        case "6":
+            print("saliendo...")
+
+        case default:
+            print("opcion no alida")
